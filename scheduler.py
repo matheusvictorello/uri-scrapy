@@ -3,31 +3,30 @@ import json
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
-		if len(sys.argv) == 4:
+		if len(sys.argv) == 2:
 			problemClass = sys.argv[1]
-			groupNumber  = sys.argv[2]
-			groupSize    = sys.argv[3]
 		else:
-			print(f'Use: python {sys.argv[0]} problemClass groupNumber groupSize')
+			print(f'Use: python {sys.argv[0]} problemClass')
 			exit(1)
 
 	else:
 		problemClass = input('Classe dos problemas: ')
-		groupNumber  = input('Número de grupos: ')
-		groupSize    = input('Número de problemas por grupo: ')
-	
-	groupNumber = int(groupNumber)
-	groupSize   = int(groupSize)
 
 	with open('problems.json', 'r', encoding='utf-8') as file:
 		problems = json.load(file)
 
+	problems = [*filter(lambda e : e['category'] == problemClass, problems)]
+	
 	startsWith = 1002
 
-	problems   = [*filter(lambda e : e['category'] == problemClass, problems)]
-	problemsID = [*map(lambda e : e['id'], problems)]
-	problemsID = [*filter(lambda e : int(e) >= startsWith, problemsID)]
+	for i in range(1, 11):
+		print(f'Level {i}')
+		problems   = [*filter(lambda e : int(e['level']) == i, problems)]
+		problemsID = [*map(lambda e : e['id'], problems)]
+		problemsID = [*filter(lambda e : int(e) >= startsWith, problemsID)]
 
+		while len(problemsID) >= 3:
+			p1, p2, p3, *problemsID = problemsID
+			print(' '.join([p1, p2, p3]))
 
-	for i in range(groupNumber):
-		print(' '.join(problemsID[i*groupSize:(i + 1)*groupSize]))
+		print(' '.join(problemsID))
