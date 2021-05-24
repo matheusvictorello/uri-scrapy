@@ -30,7 +30,4 @@ if __name__ == '__main__':
 
 
 	for i in range(groupNumber):
-		_ = []
-		for j in range(groupSize):
-			_.append(problemsID[i+j*groupSize])
-		print(' '.join(_))
+		print(' '.join(problemsID[i*groupSize:(i + 1)*groupSize]))
