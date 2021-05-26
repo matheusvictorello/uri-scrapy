@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
 	for i in range(1, 11):
 		print(f'Level {i}')
-		problems   = [*filter(lambda e : int(e['level']) == i, problems)]
-		problemsID = [*map(lambda e : e['id'], problems)]
+		problems_level   = [*filter(lambda e : int(e['level']) == i, problems)]
+		problemsID = [*map(lambda e : e['id'], problems_level)]
 		problemsID = [*filter(lambda e : int(e) >= startsWith, problemsID)]
 
 		while len(problemsID) >= 3:
