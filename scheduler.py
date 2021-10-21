@@ -1,32 +1,26 @@
 import sys
 import json
 
-if __name__ == '__main__':
-	if len(sys.argv) > 1:
-		if len(sys.argv) == 2:
-			problemClass = sys.argv[1]
-		else:
-			print(f'Use: python {sys.argv[0]} problemClass')
-			exit(1)
+problemsCategory = 'Iniciante'
 
-	else:
-		problemClass = input('Classe dos problemas: ')
+with open('problems.json', 'r', encoding='utf-8') as file:
+	problems = json.load(file)
 
-	with open('problems.json', 'r', encoding='utf-8') as file:
-		problems = json.load(file)
+problems = [*filter(lambda e : e['category'] == problemsCategory, problems)]
 
-	problems = [*filter(lambda e : e['category'] == problemClass, problems)]
-	
-	startsWith = 1002
+with open('problemsDone.json', 'r', encoding='utf-8') as file:
+	problemsDone = json.load(file)
 
-	for i in range(1, 11):
-		print(f'Level {i}')
-		problems_level   = [*filter(lambda e : int(e['level']) == i, problems)]
-		problemsID = [*map(lambda e : e['id'], problems_level)]
-		problemsID = [*filter(lambda e : int(e) >= startsWith, problemsID)]
+problemsDone = problemsDone[problemsCategory]
 
-		while len(problemsID) >= 3:
-			p1, p2, p3, *problemsID = problemsID
-			print(' '.join([p1, p2, p3]))
+problemsTodo = list(filter(lambda p : not p['id'] in problemsDone, problems))
 
-		print(' '.join(problemsID))
+problemsTodoIds = list(map(lambda p : (int(p['solved'].replace('.', '')), p['id']), problemsTodo))
+
+problemsTodoIds.sort(reverse=True)
+
+# for solved, id_ in problemsTodoIds:
+# 	print(f'{id_} {solved}')
+
+for solved, id_ in problemsTodoIds:
+	print(f'{id_} - {problemsCategory}')
